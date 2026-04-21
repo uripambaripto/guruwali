@@ -1,0 +1,1040 @@
+<!DOCTYPE html> 
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guru Wali SMP Diponegoro Sampang</title>
+    <!-- Tailwind CSS & Google Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='16' fill='%23FF0000'/%3E%3Crect y='16' width='32' height='16' fill='%23FFFFFF'/%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Chart.js untuk Grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Animasi Tombol Mulai */
+        @keyframes button-zoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Animasi Teks Pelangi */
+        @keyframes text-rainbow {
+            0% { color: #ff0000; }
+            20% { color: #ff8000; }
+            40% { color: #ffff00; }
+            60% { color: #00ff00; }
+            80% { color: #0000ff; }
+            100% { color: #ff0000; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin-once {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .animate-button-zoom {
+            animation: button-zoom 2.5s ease-in-out infinite;
+        }
+        
+        .animate-text-rainbow {
+            animation: text-rainbow 4s linear infinite;
+        }
+
+        .animate-spin-custom {
+            animation: spin-once 0.6s ease-in-out;
+        }
+
+        /* Dekorasi Jalur Pelangi di Bawah */
+        @keyframes rainbow-train-full-screen {
+            0% { left: -800px; } 
+            100% { left: 100%; }
+        }
+        
+        .rainbow-bg-layer-full {
+            position: fixed;
+            bottom: 44px; 
+            left: 0;
+            width: 100vw;
+            height: 20px;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 35;
+        }
+
+        .rainbow-train-line {
+            position: absolute;
+            height: 100%;
+            width: 800px; 
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 0, 0, 0.45), 
+                rgba(255, 165, 0, 0.45), 
+                rgba(255, 255, 0, 0.45), 
+                rgba(0, 255, 0, 0.45), 
+                rgba(0, 255, 0, 0.45), 
+                rgba(238, 130, 238, 0.45),
+                rgba(255, 0, 0, 0.45), 
+                rgba(255, 165, 0, 0.45),
+                transparent
+            );
+            filter: blur(10px); 
+            animation: rainbow-train-full-screen 8s linear infinite;
+        }
+
+        .hidden-view {
+            display: none !important;
+        }
+
+        /* Skeleton loader saat memuat data */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Custom Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        #modal-detail .overflow-y-auto::-webkit-scrollbar {
+            width: 6px;
+        }
+        #modal-detail .overflow-y-auto::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #modal-detail .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        /* Fixed column for names */
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            background-color: b lue;
+            z-index: 10;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        /* Clickable Cell Enhancement */
+        .clickable-cell {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .clickable-cell:hover {
+            background-color: #f0f9ff !important;
+            color: #2563eb !important;
+            text-decoration: underline;
+        }
+
+        /* Badge Peringkat Styling */
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 11px;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto;
+            user-select: none;
+            position: relative;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .rank-badge:hover { 
+            transform: scale(1.3);
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+            filter: brightness(1.05);
+            border-radius: 10px;
+        }
+
+        .rank-badge:active { 
+            transform: scale(0.9);
+            border-radius: 10px;
+        }
+
+        .rank-1 { background-color: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
+        .rank-2 { background-color: #f1f5f9; color: #475569; border: 2px solid #94a3b8; }
+        .rank-3 { background-color: #ffedd5; color: #9a3412; border: 2px solid #ea580c; }
+        .rank-other { background-color: #f8fafc; color: #64748b; border: 1.5px solid #e2e8f0; }
+
+        /* Highlight classes for Table */
+        .col-avg-highlight {
+            color: #4338ca !important; /* Indigo-700 */
+            font-weight: 800 !important;
+        }
+        .col-rank-highlight {
+            color: #b45309 !important; /* Amber-700 */
+            font-weight: 800 !important;
+        }
+
+/* --- 3D GRID ANIMATION SYSTEM --- */
+        .grid-3d-container {
+            perspective: 1200px;
+        }
+
+        .card-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+            will-change: transform;
+        }
+
+        /* Lapisan Konten Mengambang */
+        .card-3d-content {
+            transform: translateZ(30px);
+            transform-style: preserve-3d;
+            pointer-events: none;
+        }
+
+        /* Ikon lebih menonjol keluar */
+        .card-3d-icon {
+            transform: translateZ(60px);
+            transition: transform 0.3s ease;
+        }
+
+        .card-3d:hover .card-3d-icon {
+            transform: translateZ(80px) scale(1.1);
+        }
+
+        /* Efek Kilauan (Glint) */
+        .card-3d::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                rgba(255, 255, 255, 0.4) 0%, 
+                transparent 70%
+            );
+            border-radius: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .card-3d:hover::after {
+            opacity: 1;
+        }
+
+        /* Smooth return animation */
+        .card-3d.returning {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Utility untuk loading state */
+        .loading-overlay {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+            
+    </style>
+</head>
+<body class="bg-white text-slate-900 overflow-x-hidden selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Dekorasi Visual -->
+    <div class="rainbow-bg-layer-full">
+        <div class="rainbow-train-line"></div>
+    </div>
+
+    <!-- TAMPILAN 1: WELCOME SCREEN -->
+    <div id="welcome-view" class="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden pb-24">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-50 rounded-full blur-[120px] -z-10 opacity-60"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-50 rounded-full blur-[120px] -z-10 opacity-60"></div>
+
+        <div class="max-w-4xl w-full text-center space-y-4">
+            <div class="space-y-1 mb-2">
+                <h1 class="text-5xl md:text-6xl font-black tracking-tight text-indigo-900 leading-tight">
+                    Selamat Datang
+                </h1>
+                <p class="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">
+                    Sistem Informasi Guru Wali
+                </p>
+            </div>
+
+            <div class="relative group scale-95 md:scale-100">
+                <div class="relative z-10 p-6 md:p-10 bg-white/40 backdrop-blur-sm border border-indigo-100 rounded-[2rem] shadow-sm">
+                    <p class="text-slate-700 text-base md:text-xl leading-[1.6] font-medium tracking-tight">
+                        Guru wali adalah guru mata pelajaran yang ditugaskan secara khusus oleh kepala sekolah untuk 
+                        <span class="text-indigo-600 font-bold"> mendampingi perkembangan akademik, sosial, dan karakter </span> 
+                        peserta didik secara berkelanjutan. Peran ini diatur dalam <span class="font-bold text-slate-900">Permendikdasmen Nomor 11 Tahun 2025</span>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-2 flex flex-col items-center">
+                <button id="btn-start" class="group animate-button-zoom relative overflow-hidden inline-flex items-center bg-transparent border-2 border-indigo-200 px-8 py-3 rounded-xl font-black text-xl transition-all duration-500 hover:border-indigo-400 cursor-pointer mb-3">
+                    <span class="animate-text-rainbow drop-shadow-sm">Mulai</span>
+                </button>
+                <p id="quote-text" class="text-[12px] md:text-xs text-green-400 font-bold px-4 text-center"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAMPILAN 2: DASHBOARD -->
+    <div id="dashboard-view" class="min-h-screen bg-slate-50/50 pb-32 hidden-view">
+        <div class="px-6 md:px-8 max-w-6xl mx-auto py-12">
+            <!-- Header Dashboard -->
+            <div class="mb-1 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div>
+                    <button id="btn-logout" class="text-indigo-600 font-bold text-xs mb-3 flex items-center gap-2 hover:translate-x-[-4px] transition-transform cursor-pointer">
+                        ← Keluar & Pilih Guru Wali
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-600 rounded-lg text-white">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </div>
+                        <h2 id="welcome-user" class="text-3xl font-black text-slate-900 tracking-tight">Halo, Guru</h2>
+                    </div>
+                </div>
+                <div class="flex items-center bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-right mr-3">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Status Tugas</p>
+                        <p class="text-xs font-bold text-emerald-600">Aktif • 2025/2026</p>
+                    </div>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                </div>
+            </div>
+
+            <!-- Bagian: Tanggung Jawab -->
+            <div class="bg-white rounded-[0rem] p-1 md:p-1 border border-slate-100 shadow-sm mb-1">
+                <div class="mb-1">
+                    <h3 class="text-2xl font-black text-slate-900 mb-1 leading-tight">Peran dan Tanggung Jawab Guru Wali:</h3>
+                </div>
+                <div class="grid gap-1" id="responsibilities-list">
+                    <!-- Konten dinamis -->
+                </div>
+            </div>
+
+            <!-- Menu Grid Utama -->
+            <div class="border-t border-slate-200 pt-5">
+                <p class="text-[10px] text-sm font-black font-bold text-black-800 drop-cap::first-letter tracking-widest mb-2 text-center md:text-left">Akses Cepat Menu Guru Wali</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    
+                    <!-- Menu 1 -->
+                    <button onclick="navigateTo('siswa-view')" 
+                            class="card-3d flex flex-col items-center justify-center py-10 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-2xl hover:border-indigo-400 cursor-pointer group">
+                        <div class="card-3d-content flex flex-col items-center">
+                            <div class="card-3d-icon p-5 bg-indigo-50 rounded-2xl mb-2 text-indigo-600 shadow-inner">
+                                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <span class="text-sm font-black text-orange-800">Data Siswa</span>
+                        </div>
+                    </button>
+
+                    <!-- Menu 2 -->
+                    <button onclick="navigateTo('nilai-view')" 
+                            class="card-3d flex flex-col items-center justify-center py-10 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-2xl hover:border-indigo-400 cursor-pointer group">
+                        <div class="card-3d-content flex flex-col items-center">
+                            <div class="card-3d-icon p-5 bg-emerald-50 rounded-2xl mb-2 text-emerald-600 shadow-inner">
+                                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                            </div>
+                            <span class="text-sm font-black text-blue-800">Nilai Akademik</span>
+                        </div>
+                    </button>
+
+                    <!-- Menu 3 -->
+                    <button onclick="navigateTo('absensi-view')" 
+                            class="card-3d flex flex-col items-center justify-center py-10 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-2xl hover:border-indigo-400 cursor-pointer group">
+                        <div class="card-3d-content flex flex-col items-center">
+                            <div class="card-3d-icon p-5 bg-amber-50 rounded-2xl mb-2 text-amber-600 shadow-inner">
+                                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 14l2 2 4-4"/></svg>
+                            </div>
+                            <span class="text-sm font-black text-green-800">Absensi</span>
+                        </div>
+                    </button>
+
+                    <!-- Menu 4 -->
+                    <button onclick="navigateTo('konseling-view')" 
+                            class="card-3d flex flex-col items-center justify-center py-10 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-2xl hover:border-indigo-400 cursor-pointer group">
+                        <div class="card-3d-content flex flex-col items-center">
+                            <div class="card-3d-icon p-5 bg-rose-50 rounded-2xl mb-2 text-rose-600 shadow-inner">
+                                <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>
+                            </div>
+                            <span class="text-sm font-black text-red-800">Konseling</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- TEMPLATE HALAMAN KONTEN -->
+    <div id="content-page-template" class="min-h-screen bg-slate-50/50 hidden-view pb-32">
+        <div class="px-6 md:px-8 max-w-6xl mx-auto py-12">
+            <div class="flex justify-between items-center mb-1">
+                <button onclick="navigateTo('dashboard-view')" class="flex items-center gap-2 text-indigo-600 font-bold text-xs hover:translate-x-[-4px] transition-transform">
+                    ← Kembali ke Dashboard
+                </button>
+                <button onclick="handleRefresh()" id="btn-refresh" class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-xl text-slate-600 font-bold text-xs hover:border-indigo-300 hover:text-indigo-600 transition-all shadow-sm active:scale-95">
+                    <svg id="icon-refresh" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    <span>Refresh Data</span>
+                </button>
+            </div>
+            
+            <div id="page-content-wrapper" class="bg-white rounded-[0rem] p-1 md:p-1 border border-slate-100 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-1">
+                    <div class="flex items-center gap-4">
+                        <div id="page-icon" class="p-4 bg-indigo-600 rounded-2xl text-white"></div>
+                        <div>
+                            <h1 id="page-title" class="text-3xl font-black text-slate-900 leading-tight">Judul</h1>
+                            <div class="flex flex-col">
+                                <p id="page-subtitle" class="text-slate-500 font-medium text-sm">Deskripsi</p>
+                                <p id="page-teacher-name" class="text-indigo-600 font-bold text-[10px] drop-cap::first-letter tracking-wider mt-1">Guru Wali: -</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="page-extra-header" class="w-full md:w-auto"></div>
+                </div>
+                <hr class="border-slate-100 mb-1">
+                <div id="page-body" class="text-slate-600"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GRAFIK PERKEMBANGAN -->
+    <div id="modal-grafik" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeGrafik()"></div>
+        <div class="relative bg-white w-full max-w-3xl rounded-[0rem] shadow-2xl overflow-hidden animate-fadeIn flex flex-col max-h-[90vh]">
+            <div class="p-2 border-b border-slate-100 flex justify-between items-center">
+                <div>
+                    <p id="grafik-subtitle" class="text-indigo-600 font-black text-[10px] uppercase tracking-widest mb-1">Perkembangan Nilai</p>
+                    <h3 id="grafik-title" class="text-2xl font-black text-slate-900 leading-tight">Nama Siswa</h3>
+                </div>
+                <button onclick="closeGrafik()" class="p-3 bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-all">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-2 overflow-y-auto">
+                <div class="bg-slate-50 p-2 rounded-[2rem] border border-slate-100">
+                    <canvas id="chartPerkembangan" class="w-full"></canvas>
+                </div>
+                <p id="grafik-note" class="text-[12px] text-green-400 italic text-center mt-1">Data grafik diambil dari akumulasi nilai rata-rata tiap semester.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL SISWA -->
+    <div id="modal-detail" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeDetail()"></div>
+        <div class="relative bg-white w-full max-w-2xl rounded-[0rem] shadow-2xl overflow-hidden max-h-[85vh] flex flex-col border-l-[8px] border-r-[8px] border-indigo-600 animate-fadeIn">
+            
+            <div class="bg-indigo-600 p-2 text-white relative">
+                <div class="absolute top-0 right-0 p-6">
+                    <button onclick="closeDetail()" class="text-white/60 hover:text-white bg-white/10 p-2 rounded-xl transition-colors backdrop-blur-md">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-md border border-white/30">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200 mb-1">Informasi Peserta Didik</p>
+                        <h3 id="modal-student-name" class="text-3xl font-black leading-none">Nama Siswa</h3>
+                        <div class="flex gap-2 mt-3">
+                            <span id="modal-student-class" class="bg-red-700/50 px-3 py-1 rounded-lg text-xs font-bold border border-white/10">Kelas -</span>
+                            <span id="modal-student-id" class="bg-green-700/50 px-3 py-1 rounded-lg text-xs font-bold border border-white/10">NIS: -</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-2 overflow-y-auto bg-slate-50/50">
+                <div id="detail-content" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </div>
+                
+                <div class="mt-1 pt-1 border-t border-aquamarine-200">
+                    <button onclick="closeDetail()" class="w-full bg-yellow py-4 rounded-2xl font-black text-slate-600 hover:text-indigo-600 transition-all border border-slate-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                        <span>Tutup Profil</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PILIH GURU WALI -->
+    <div id="modal-guru" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]" onclick="closeModal()"></div>
+        <div class="relative bg-white w-full max-w-sm overflow-hidden rounded-2xl shadow-2xl z-10 border-x-[6px] border-emerald-500">
+            <div class="p-1 flex flex-col">
+                <div class="relative">
+                    <select id="select-guru" class="w-full appearance-none bg-white text-slate-700 text-sm font-semibold rounded-xl block p-5 pr-12 cursor-pointer outline-none hover:bg-slate-50">
+                        <option value="" disabled selected>Pilih Guru Wali Anda...</option>
+                        <option value="Ali Sadikin">Ali Sadikin</option>
+                        <option value="Ina Solikhati">Ina Solikhati</option>
+                        <option value="Syihabudin">Syihabudin</option>
+                        <option value="Urip Ambaripto">Urip Ambaripto</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none text-slate-400">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER MEDIA SOSIAL -->
+    <div class="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none">
+        <div class="relative flex items-center gap-10 px-8 py-3 pointer-events-auto">
+            <a href="https://www.instagram.com/sekarmasdipo" target="_blank" rel="noopener noreferrer" class="relative z-10 text-slate-400 hover:text-pink-600 transition-all hover:scale-125"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            <a href="https://www.tiktok.com/@uripambaripto" target="_blank" rel="noopener noreferrer" class="relative z-10 text-slate-400 hover:text-black transition-all hover:scale-125"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" /></svg></a>
+            <a href="https://www.facebook.com/@smpdiposampang" target="_blank" rel="noopener noreferrer" class="relative z-10 text-slate-400 hover:text-blue-600 transition-all hover:scale-125"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+            <a href="https://www.youtube.com/@smpdiposampang" target="_blank" rel="noopener noreferrer" class="relative z-10 text-slate-400 hover:text-red-600 transition-all hover:scale-125"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 0 0-1.94 2C1 8.12 1 12 1 12s0 3.88.42 5.58a2.78 2.78 0 0 0 1.94 2c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 0 0 1.94-2C23 15.88 23 12 23 12s0-3.88-.46-5.58z M9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+        </div>
+    </div>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        const TEACHER_SPREADSHEET_MAP = {
+            "Ali Sadikin": {
+                siswa: "https://script.google.com/macros/s/AKfycbyi6qFRozvBMTvXk-LGB-sqyWyKjOjRKLQXMe776_wGqUt-5Ebe5x0HIIinr4X196EvaQ/exec",
+                nilai: "https://script.google.com/macros/s/AKfycbyam7P5ZTbzGdwKeixt0Hr83sr0t53xzU8bUY4BqsjdSWeNSX1afi_scQwJ0Ya3NDZA/exec",
+                absensi: "https://script.google.com/macros/s/AKfycbzhtj4myj-KynV0E-6WJ8X8lNEMcv2VUV_731mU_0IPYikPfMIGXmSAGPdkU_7Zw07i/exec",
+                konseling: "https://script.google.com/macros/s/AKfycbxRjYwREdFztEYeGj5qSpojQJVtCJHg_bM2l-2wPlJ0iXpA7UBYVi-xPlP5K1HXWNpq/exec"
+            },
+            "Ina Solikhati": {
+                siswa: "https://script.google.com/macros/s/AKfycbwbkvWfx6xtvfWFxDMkegTWkG-BGw4Vn-WNMm4u9ZCbbAfVTjZo5jpYxvMBskknDwSZQw/exec",
+                nilai: "https://script.google.com/macros/s/AKfycbzyMufEFq09y8TspGTTBGDf-2tEcCMUbQtoYpmUaSNxtn8_m2SGCYIih9byo4Qj8mr9ZA/exec",
+                absensi: "https://script.google.com/macros/s/AKfycbyI_xR0Xkle2DekuxvTvoehpVDaCISsPCUALiX_ZgBob4e0zSbUO-opX1ego2uH8LwR/exec",
+                konseling: "https://script.google.com/macros/s/AKfycbw1xkDL-ojeWbST_YQ1_HBzQdaMCuVY8KpX-uLXvsJW6VtZQft2q3ZnFXYBJC878b3ZTQ/exec"
+            },
+            "Syihabudin": {
+                siswa: "https://script.google.com/macros/s/AKfycbyJX5CJibCebcNd_QHl9nFEwNOKlUaUZm1bwo_chFnVia1SUVLrKAuo5JRIRJbWt5Qe/exec",
+                nilai: "https://script.google.com/macros/s/AKfycbzI2H6hvNqpd1JLH0oM4SwZEZbdUsaPC8v9MBcbevJxNfoRsGexNTIV8vjaRjwfUjOv/exec",
+                absensi: "https://script.google.com/macros/s/AKfycbxByxrF3HwcuLmZFuF9sY__Dr5KWA0_W4lQdnIg42hiexQ5WTL8pgLZeX4Sf16yBxIxoQ/exec",
+                konseling: "https://script.google.com/macros/s/AKfycbyTNJF-3tKj2-WkD3yrA8b3iz0s5YQa8iwzPkZ0bdgT44AmidVxmJqgtNiVNuHQXpM/exec"
+            },
+            "Urip Ambaripto": {
+                siswa: "https://script.google.com/macros/s/AKfycbyQGZyT6eSDbqgx0UEyynQ-t6pvITE69SFecd4zot3LgIskf3qE6raKV7dRxmCO_gkq/exec",
+                nilai: "https://script.google.com/macros/s/AKfycbxbcSR0N8ZE_oGeo0M95aTfppgDffjPmPS0tXwF92enFHKGy5jidGiv6xG7V19DVxYs/exec",
+                absensi: "https://script.google.com/macros/s/AKfycbzAjjwYuAHvT0per7Hdy6XjCL-Ba-T16cFDbEIuZuHyFQyHQ1d7aQ7w_F-kNbJcwCmdzA/exec",
+                konseling: "https://script.google.com/macros/s/AKfycbyx14Ctwe7ljBl15eB85nmPFuXfSvseJ4VPGP-tZEyUE7nVZPh-NJ3Ng2GZkmhNIxmWww/exec"
+            }
+        };
+
+        let selectedTeacher = "";
+        let currentView = "";
+        let currentStudentList = [];
+        let currentSemester = "s1";
+        let currentSiswaTab = "s1"; 
+        let currentCounselingTab = "akademik"; 
+        let currentFullNilaiData = []; 
+        let currentFullAbsensiData = []; 
+        let chartInstance = null;
+
+        const ACADEMIC_SUBJECTS = ["PAI", "PP", "Ind", "Mat", "IPA", "IPS", "Ing", "PJOK", "Inf", "SBP", "Jaw", "NU"];
+        const ABSENCE_KEYS = ["S", "I", "A"];
+
+        const cleanVal = (val) => (val !== undefined && val !== null && val !== "") ? String(val).trim() : "-";
+        
+        // --- LOGIKA FILTER KOLOM NOMOR ---
+        function isNoColumn(key) {
+            if (!key) return false;
+            const cleanKey = key.toString().toLowerCase().trim();
+            return cleanKey === 'no' || 
+                   cleanKey === 'no.' || 
+                   cleanKey === 'nomor' || 
+                   cleanKey === 'nomer' || 
+                   cleanKey === '#' || 
+                   cleanKey === 'id' ||
+                   cleanKey === '';
+        }
+
+        const isNameColumn = (header) => {
+            const h = header.toLowerCase();
+            return h === "nama" || h === "nama siswa";
+        };
+
+        const isClassColumn = (header) => {
+            return header.toLowerCase() === "kelas";
+        };
+
+        async function fetchData(moduleType, sheetName = "data") {
+            const config = TEACHER_SPREADSHEET_MAP[selectedTeacher];
+            if (!config) return [];
+            const url = `${config[moduleType]}?sheet=${sheetName}&t=${new Date().getTime()}`;
+            try {
+                const response = await fetch(url);
+                const result = await response.json();
+                return Array.isArray(result) ? result : [];
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+                return [];
+            }
+        }
+
+        async function handleRefresh() {
+            const icon = document.getElementById('icon-refresh');
+            icon.classList.remove('animate-spin-custom');
+            void icon.offsetWidth;
+            icon.classList.add('animate-spin-custom');
+            if (currentView === 'siswa-view') await renderSiswaPage();
+            else if (currentView === 'nilai-view') await renderNilaiPage();
+            else if (currentView === 'absensi-view') await renderAbsensiPage();
+            else if (currentView === 'konseling-view') await renderCounselingPage();
+        }
+
+        async function renderSiswaPage() {
+            const extraHeader = document.getElementById('page-extra-header');
+            const body = document.getElementById('page-body');
+            const semesters = [1, 2, 3, 4, 5, 6];
+            extraHeader.innerHTML = `<div class="flex items-center gap-1 bg-slate-100 p-1.5 rounded-xl overflow-x-auto no-scrollbar w-full md:w-auto mt-4 md:mt-0">${semesters.map(num => `<button onclick="changeSiswaTab('s${num}')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentSiswaTab === 's' + num ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:bg-white/50'}">Semester ${num}</button>`).join('')}</div>`;
+            body.innerHTML = `<div class="space-y-4"><div class="flex justify-between items-center mb-2"><h4 class="font-bold text-slate-800">Data Siswa</h4><span id="student-count" class="text-xs font-bold bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full">Memuat...</span></div><div class="overflow-x-auto border border-slate-100 rounded-2xl"><table class="w-full text-left border-collapse min-w-[600px]"><thead id="student-table-header"></thead><tbody id="student-table-body"></tbody></table></div></div>`;
+            
+            let data = await fetchData("siswa", currentSiswaTab);
+            currentStudentList = data;
+            const tableBody = document.getElementById('student-table-body');
+            const tableHeader = document.getElementById('student-table-header');
+            const countLabel = document.getElementById('student-count');
+            
+            if (data.length > 0) {
+                countLabel.innerText = `${data.length} Siswa Bimbingan Guru Wali`;
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100"><th class="py-1 px-1 text-[12px] font-black font-bold drop-cap::first-letter tracking-widest sticky-col text-left">Nama</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-200">Kelas</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-100">Aksi</th></tr>`;
+                tableBody.innerHTML = data.map((item, index) => `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0 group"><td class="py-1 px-1 text-xs sticky-col font-bold text-blue-800 group-hover:bg-indigo-50/30">${item["Nama"] || item["Nama Siswa"] || "-"}</td><td class="py-1 px-1 text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200 text-xs group-hover:bg-indigo-50/30">${item["Kelas"] || "-"}</td><td class="py-1 px-1 text-center border-l border-slate-50 group-hover:bg-indigo-50/30"><button onclick="openDetail(${index})" class="bg-green-900 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold hover:bg-indigo-600 transition-all cursor-pointer">Detail</button></td></tr>`).join('');
+            } else { countLabel.innerText = "0 Siswa"; tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
+        }
+
+        function changeSiswaTab(tabId) { currentSiswaTab = tabId; renderSiswaPage(); }
+
+        // Fungsi pembungkus untuk navigasi dan refresh agar tidak terjadi ReferenceError
+        async function renderNilaiPage() { await renderTabulatedPage('nilai'); }
+        async function renderAbsensiPage() { await renderTabulatedPage('absensi'); }
+        async function renderCounselingPage() {
+            const extraHeader = document.getElementById('page-extra-header');
+            const body = document.getElementById('page-body');
+            const tabs = [{ id: "akademik", label: "Akademik" }, { id: "kompetensi", label: "Kompetensi" }, { id: "karakter", label: "Karakter" }];
+            extraHeader.innerHTML = `<div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-full md:w-auto mt-4 md:mt-0">${tabs.map(tab => `<button onclick="changeCounselingTab('${tab.id}')" class="px-1 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentCounselingTab === tab.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:bg-white/50'}">${tab.label}</button>`).join('')}</div>`;
+            body.innerHTML = `<div class="space-y-1"><div class="flex justify-between items-center"><h4 class="font-bold text-slate-800 capitalize">Bimbingan & Konseling: ${currentCounselingTab}</h4></div><div class="overflow-x-auto border border-slate-100 rounded-2xl"><table class="w-full text-left border-collapse min-w-[800px]"><thead id="counseling-header"></thead><tbody id="counseling-body"></tbody></table></div></div>`;
+            await renderCounselingData();
+        }
+
+        async function renderCounselingData() {
+            const tableBody = document.getElementById('counseling-body');
+            const tableHeader = document.getElementById('counseling-header');
+            const data = await fetchData("konseling", currentCounselingTab);
+            if (data && data.length > 0) {
+                const allHeaders = Object.keys(data[0]);
+                const headers = allHeaders.filter(h => !isNoColumn(h));
+
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black drop-cap::first-letter tracking-widest ${isNameColumn(h) ? 'sticky-col text-left align-top' : (isClassColumn(h) ? 'text-left align-top bg-blue-100 border-l border-blue-200' : 'text-left align-top border-l border-blue-100')}">${h}</th>`).join('')}</tr>`;
+                tableBody.innerHTML = data.map(item => `<tr class="hover:bg-indigo-50/30 transition-colors border-b border-slate-50 group">${headers.map((h) => `<td class="py-1 px-1 text-xs ${isNameColumn(h) ? 'sticky-col font-bold text-blue-800 text-left align-top' : (isClassColumn(h) ? 'text-left align-top text-slate-900 font-bold bg-slate-50 border-l border-slate-200' : 'text-left align-top text-slate-600 border-l border-slate-50')} group-hover:bg-indigo-50/30">${cleanVal(item[h])}</td>`).join('')}</tr>`).join('');
+            } else { tableBody.innerHTML = `<tr><td class="py-10 text-left align-top text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
+        }
+
+        function changeCounselingTab(tabId) { currentCounselingTab = tabId; renderCounselingPage(); }
+
+        async function renderTabulatedPage(moduleType) {
+            const extraHeader = document.getElementById('page-extra-header');
+            const body = document.getElementById('page-body');
+            const semesters = [1, 2, 3, 4, 5, 6];
+            const isNilai = moduleType === 'nilai';
+            const isAbsensi = moduleType === 'absensi';
+
+            extraHeader.innerHTML = `<div class="flex items-center gap-1 bg-slate-100 p-1.5 rounded-xl overflow-x-auto no-scrollbar w-full md:w-auto mt-4 md:mt-0">${semesters.map(num => `<button onclick="changeSemester('s${num}', '${moduleType}')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentSemester === 's' + num ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:bg-white/50'}">Sem ${num}</button>`).join('')}${isNilai ? `<button onclick="changeSemester('avg', 'nilai')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentSemester === 'avg' ? 'bg-indigo-600 text-white shadow-sm' : 'text-indigo-600 hover:bg-indigo-50'}">Rata-Rata Rapor</button>` : ''}${isAbsensi ? `<button onclick="changeSemester('total', 'absensi')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentSemester === 'total' ? 'bg-red-600 text-white shadow-sm' : 'text-red-600 hover:bg-red-50'}">Total Absensi</button>` : ''}</div>`;
+            body.innerHTML = `<div class="space-y-1"><div class="flex justify-between items-center"><h4 class="font-bold text-slate-800">${isNilai ? (currentSemester === 'avg' ? 'Rata-Rata Rapor' : 'Nilai Akademik') : (currentSemester === 'total' ? 'Rekap Total Ketidakhadiran' : 'Rekapitulasi Absensi')}</h4></div><div class="overflow-x-auto border border-slate-100 rounded-2xl"><table class="w-full text-left border-collapse min-w-[800px]"><thead id="tabulated-header"></thead><tbody id="tabulated-body"></tbody></table></div></div>`;
+
+            if (isNilai && currentSemester === 'avg') await renderRataRataRapor(document.getElementById('tabulated-body'), document.getElementById('tabulated-header'));
+            else if (isAbsensi && currentSemester === 'total') await renderTotalAbsensi(document.getElementById('tabulated-body'), document.getElementById('tabulated-header'));
+            else await renderDynamicTable(moduleType);
+        }
+
+        async function renderDynamicTable(moduleType) {
+            const tableBody = document.getElementById('tabulated-body');
+            const tableHeader = document.getElementById('tabulated-header');
+            const data = await fetchData(moduleType, currentSemester);
+            if (data.length > 0) {
+                const allHeaders = Object.keys(data[0]);
+                const headers = allHeaders.filter(h => !isNoColumn(h));
+
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest ${isNameColumn(h) ? 'sticky-col text-left' : (isClassColumn(h) ? 'text-center bg-slate-100 border-l border-slate-200' : 'text-center border-l border-slate-100')}">${h}</th>`).join('')}</tr>`;
+                tableBody.innerHTML = data.map(item => `<tr class="hover:bg-indigo-50/30 border-b border-slate-50 group">${headers.map((h) => {
+                    let customClass = "";
+                    const headerClean = h.toLowerCase().trim();
+                    // Logika pewarnaan otomatis berdasarkan nama kolom
+                    if (headerClean === "rata-rata" || headerClean === "rata rata") customClass = "col-avg-highlight";
+                    if (headerClean === "peringkat" || headerClean === "rank") customClass = "col-rank-highlight";
+                    
+                    return `<td class="py-1 px-1 text-xs ${isNameColumn(h) ? 'sticky-col font-bold text-slate-800 text-left' : (isClassColumn(h) ? 'text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200' : 'text-center text-slate-600 border-l border-slate-100')} group-hover:bg-indigo-50/30 ${customClass}">${cleanVal(item[h])}</td>`;
+                }).join('')}</tr>`).join('');
+            } else { tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
+        }
+
+        async function renderRataRataRapor(tableBody, tableHeader) {
+            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100">
+                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest sticky-col text-left">Nama Siswa</th>
+                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-center border-l border-slate-200">Kelas</th>
+                ${ACADEMIC_SUBJECTS.map(subj => `<th class="py-1 px-1 text-[9px] font-black text-slate-900 uppercase tracking-tighter text-center border-l border-slate-100">${subj}</th>`).join('')}
+                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-center border-l border-slate-200">Rata-Rata</th>
+                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-center border-l border-slate-200">Peringkat</th>
+            </tr>`;
+            
+            const promises = [1,2,3,4,5,6].map(num => fetchData("nilai", `s${num}`));
+            const allSemesterData = await Promise.all(promises);
+            currentFullNilaiData = allSemesterData; 
+            const summaryMap = {};
+            
+            allSemesterData.forEach(semesterList => {
+                semesterList.forEach(row => {
+                    const nama = row["Nama"] || row["Nama Siswa"];
+                    if (!nama) return;
+                    if (!summaryMap[nama]) { 
+                        summaryMap[nama] = { nama, kelas: row["Kelas"] || "-" }; 
+                        ACADEMIC_SUBJECTS.forEach(s => summaryMap[nama][s] = { sum: 0, count: 0 }); 
+                    }
+                    ACADEMIC_SUBJECTS.forEach(subj => { 
+                        const val = parseFloat(row[subj] || row[subj.toUpperCase()] || 0); 
+                        if (val > 0) { summaryMap[nama][subj].sum += val; summaryMap[nama][subj].count += 1; } 
+                    });
+                });
+            });
+            const summaryArray = Object.values(summaryMap).map(s => {
+                let totalAvg = 0, countAvg = 0;
+                ACADEMIC_SUBJECTS.forEach(subj => {
+                    const d = s[subj];
+                    const a = d.count > 0 ? (d.sum / d.count) : 0;
+                    if (a > 0) { totalAvg += a; countAvg++; }
+                });
+                s.finalAvgValue = countAvg > 0 ? (totalAvg / countAvg) : 0;
+                return s;
+            });
+
+            summaryArray.sort((a, b) => b.finalAvgValue - a.finalAvgValue);
+
+            if (summaryArray.length > 0) {
+                tableBody.innerHTML = summaryArray.map((s, index) => {
+                    const rank = index + 1;
+                    let rankClass = "rank-other";
+                    if (rank === 1) rankClass = "rank-1";
+                    else if (rank === 2) rankClass = "rank-2";
+                    else if (rank === 3) rankClass = "rank-3";
+
+                    const rowHtml = ACADEMIC_SUBJECTS.map(subj => {
+                        const d = s[subj];
+                        const a = d.count > 0 ? (d.sum / d.count) : 0;
+                        return `<td class="py-1 px-1 text-center text-xs font-bold text-slate-600 border-l border-slate-50 clickable-cell" onclick="openGrafik('${s.nama}', '${subj}')">${a > 0 ? a.toFixed(1) : "-"}</td>`;
+                    }).join('');
+                    
+                    return `<tr class="hover:bg-indigo-50/30 transition-colors border-b border-slate-50 group">
+                        <td class="py-1 px-1 sticky-col group-hover:bg-indigo-50/30 text-left font-bold text-slate-800 text-xs">${s.nama}</td>
+                        <td class="py-1 px-1 text-center font-bold text-slate-900 bg-slate-50 border-l border-slate-200 text-xs">${s.kelas}</td>
+                        ${rowHtml}
+                        <td class="py-1 px-1 text-center font-bold text-slate-600 text-xs border-l border-slate-200 bg-white group-hover:bg-indigo-50/30 clickable-cell" onclick="openGrafikRataRata('${s.nama}')">${s.finalAvgValue.toFixed(1)}</td>
+                        <td class="py-1 px-1 text-center border-l border-slate-200 group-hover:bg-indigo-50/30">
+                            <div class="rank-badge ${rankClass}" onclick="openGrafikPeringkat('${s.nama}')">${rank}</div>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } else { tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
+        }
+
+        async function renderTotalAbsensi(tableBody, tableHeader) {
+            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100"><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest sticky-col text-left">Nama Siswa</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-200">Kelas</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">S (Sakit)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">I (Izin)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">A (Alfa)</th><th class="py-1 px-1 text-[10px] font-black text-red-700 uppercase tracking-widest text-center border-l border-slate-200">Total Akumulasi</th></tr>`;
+            const promises = [1,2,3,4,5,6].map(num => fetchData("absensi", `s${num}`));
+            const allData = await Promise.all(promises);
+            currentFullAbsensiData = allData;
+            const summary = {};
+            allData.forEach(list => { 
+                list.forEach(row => { 
+                    const nama = row["Nama"] || row["Nama Siswa"]; if (!nama) return; 
+                    if (!summary[nama]) summary[nama] = { kelas: row["Kelas"] || "-", S: 0, I: 0, A: 0 }; 
+                    ABSENCE_KEYS.forEach(key => {
+                        const val = parseInt(row[key] || 0);
+                        if(key.includes('S')) summary[nama].S += val; else if(key.includes('I')) summary[nama].I += val; else if(key.includes('A')) summary[nama].A += val;
+                    }); 
+                }); 
+            });
+            const names = Object.keys(summary).sort();
+            if (names.length > 0) { 
+                tableBody.innerHTML = names.map(n => {
+                    const totalSIA = summary[n].S + summary[n].I + summary[n].A;
+                    return `<tr class="hover:bg-red-50/30 border-b border-slate-50 group"><td class="py-1 px-1 sticky-col group-hover:bg-red-50/30 font-bold text-slate-800 text-xs text-left">${n}</td><td class="py-1 px-1 text-center font-bold text-slate-900 bg-slate-50 border-l border-slate-200 text-xs">${summary[n].kelas}</td><td class="py-1 px-1 text-center text-xs text-slate-600 border-l border-slate-50 font-bold clickable-cell" onclick="openGrafikAbsensi('${n}', 'S')">${summary[n].S}</td><td class="py-1 px-1 text-center text-xs text-slate-600 border-l border-slate-50 font-bold clickable-cell" onclick="openGrafikAbsensi('${n}', 'I')">${summary[n].I}</td><td class="py-1 px-1 text-center text-xs text-slate-600 border-l border-slate-50 font-bold clickable-cell" onclick="openGrafikAbsensi('${n}', 'A')">${summary[n].A}</td><td class="py-1 px-1 text-center font-black text-red-600 text-sm border-l border-slate-200 bg-white group-hover:bg-red-50/30 clickable-cell" onclick="openGrafikAbsensi('${n}', 'TOTAL')">${totalSIA}</td></tr>`}).join(''); 
+            } else { tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
+        }
+
+        // --- GRAFIK & MODAL LOGIC ---
+        function openGrafik(nama, mapel) {
+            const values = [0,0,0,0,0,0];
+            currentFullNilaiData.forEach((list, idx) => {
+                const row = list.find(r => (r["Nama"] || r["Nama Siswa"]) === nama);
+                if (row) { const val = parseFloat(row[mapel] || row[mapel.toUpperCase()] || 0); values[idx] = val > 0 ? parseFloat(val.toFixed(1)) : 0; }
+            });
+            renderChartModal(nama, `Perkembangan Nilai: ${mapel}`, values, '#4f46e5');
+        }
+
+        function openGrafikRataRata(nama) {
+            const values = [0,0,0,0,0,0];
+            currentFullNilaiData.forEach((list, idx) => {
+                const row = list.find(r => (r["Nama"] || r["Nama Siswa"]) === nama);
+                if (row) {
+                    let sum = 0, count = 0;
+                    ACADEMIC_SUBJECTS.forEach(subj => { const val = parseFloat(row[subj] || row[subj.toUpperCase()] || 0); if (val > 0) { sum += val; count++; } });
+                    values[idx] = count > 0 ? parseFloat((sum / count).toFixed(1)) : 0;
+                }
+            });
+            renderChartModal(nama, "Perkembangan Rata-Rata Rapor", values, '#10b981');
+        }
+
+        function openGrafikPeringkat(nama) {
+            const ranks = [0,0,0,0,0,0];
+            currentFullNilaiData.forEach((semesterList, idx) => {
+                const list = [];
+                semesterList.forEach(row => {
+                    let sum = 0, count = 0;
+                    ACADEMIC_SUBJECTS.forEach(subj => { const val = parseFloat(row[subj] || row[subj.toUpperCase()] || 0); if (val > 0) { sum += val; count++; } });
+                    const avg = count > 0 ? sum / count : 0;
+                    list.push({ nama: row["Nama"] || row["Nama Siswa"], avg: avg });
+                });
+                list.sort((a, b) => b.avg - a.avg);
+                const pos = list.findIndex(item => item.nama === nama);
+                ranks[idx] = pos !== -1 ? pos + 1 : 0;
+            });
+            renderChartModal(nama, "Perkembangan Peringkat Semester 1 - 6", ranks, '#f59e0b', 0, true);
+        }
+
+
+        function openGrafikAbsensi(nama, tipe) {
+            const values = [0,0,0,0,0,0];
+            currentFullAbsensiData.forEach((list, idx) => {
+                const row = list.find(r => (r["Nama"] || r["Nama Siswa"]) === nama);
+                if (row) {
+                    if (tipe === 'TOTAL') values[idx] = (parseInt(row['S (Sakit)'] || row['S'] || 0) + parseInt(row['I (Ijin)'] || row['I'] || 0) + parseInt(row['A (Alfa)'] || row['A'] || 0));
+                    else {
+                        const k = tipe === 'S' ? 'S (Sakit)' : (tipe === 'I' ? 'I (Ijin)' : 'A (Alfa)');
+                        values[idx] = parseInt(row[k] || row[tipe] || 0);
+                    }
+                }
+            });
+            let c = '#3b82f6'; let l = tipe;
+            if(tipe === 'I') c = '#f59e0b'; else if(tipe === 'A') c = '#ef4444'; else if(tipe === 'TOTAL') c = '#991b1b';
+            renderChartModal(nama, `Tren Ketidakhadiran: ${l}`, values, c, 10);
+        }
+
+        function renderChartModal(nama, subtitle, dataPoints, color, maxScale = 100, isRank = false) {
+            const modal = document.getElementById('modal-grafik');
+            const ctx = document.getElementById('chartPerkembangan').getContext('2d');
+            const note = document.getElementById('grafik-note');
+            document.getElementById('grafik-title').innerText = nama;
+            document.getElementById('grafik-subtitle').innerText = subtitle;
+            document.getElementById('grafik-subtitle').style.color = color;
+            note.innerText = isRank ? "Grafik peringkat menunjukkan posisi siswa. Semakin ke atas (menuju angka 1), semakin baik." : "Data grafik diambil dari akumulasi nilai atau kehadiran tiap semester.";
+            modal.classList.remove('hidden');
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Smt 1', 'Smt 2', 'Smt 3', 'Smt 4', 'Smt 5', 'Smt 6'],
+                    datasets: [{
+                        label: subtitle,
+                        data: dataPoints,
+                        borderColor: '#6366f1',
+                        backgroundColor: `${color}1A`,
+                        borderWidth: 4,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: color,
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            reverse: isRank, 
+                            grid: { borderDash: [5, 5] }, 
+                            ticks: { 
+                                font: { weight: 'bold' },
+                                stepSize: isRank ? 1 : (maxScale === 10 ? 1 : 10),
+                                callback: function(value) { return (isRank && value % 1 !== 0) ? '' : value; }
+                            },
+                            suggestedMin: isRank ? 1 : 0,
+                            suggestedMax: isRank ? undefined : maxScale
+                        },
+                        x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } }
+                    },
+                    animation: { duration: 1200, easing: 'easeOutQuart' }
+                },
+                plugins: [{
+                    afterDatasetsDraw: (chart) => {
+                        const {ctx} = chart; ctx.save();
+                        ctx.font = 'bold 12px Plus Jakarta Sans';
+                        ctx.fillStyle = color; ctx.textAlign = 'center';
+                        chart.getDatasetMeta(0).data.forEach((point, i) => {
+                            const val = chart.data.datasets[0].data[i];
+                            if (val !== null && val !== undefined) ctx.fillText(isRank ? Math.round(val) : val.toFixed(0), point.x, point.y - 15);
+                        });
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+
+        function closeGrafik() { document.getElementById('modal-grafik').classList.add('hidden'); }
+        function changeSemester(semId, type) { currentSemester = semId; if (type === 'nilai') renderNilaiPage(); else renderAbsensiPage(); }
+
+        function openDetail(index) {
+            const s = currentStudentList[index]; if (!s) return;
+            document.getElementById('modal-student-name').innerText = s["Nama"] || s["Nama Siswa"] || "N/A";
+            document.getElementById('modal-student-class').innerText = `Kelas ${s["Kelas"] || "-"}`;
+            document.getElementById('modal-student-id').innerText = `NIS: ${s["NIS"] || s["Nis"] || "-"}`;
+            const contentArea = document.getElementById('detail-content');
+            const cards = Object.entries(s).filter(([k]) => !["Nama", "Nama Siswa", "Kelas", "NIS", "Nis"].includes(k) && !isNoColumn(k)).map(([k, v]) => `<div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm transition-all"><div class="flex items-start gap-4"><div class="p-2.5 bg-slate-50 rounded-xl text-slate-400"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">${k.replace(/_/g, ' ')}</p><p class="text-sm font-bold text-slate-800">${cleanVal(v)}</p></div></div></div>`).join('');
+            contentArea.innerHTML = cards || `<div class="col-span-full py-10 text-center text-slate-400 italic font-bold">Detail tidak tersedia.</div>`;
+            document.getElementById('modal-detail').classList.remove('hidden');
+        }
+
+        function closeDetail() { document.getElementById('modal-detail').classList.add('hidden'); }
+
+        function navigateTo(viewId) {
+            currentView = viewId;
+            const views = { welcome: document.getElementById('welcome-view'), dashboard: document.getElementById('dashboard-view'), content: document.getElementById('content-page-template') };
+            Object.values(views).forEach(v => v.classList.add('hidden-view'));
+            document.getElementById('page-teacher-name').innerText = `Guru Wali: ${selectedTeacher || '-'}`;
+            if (viewId === 'dashboard-view') views.dashboard.classList.remove('hidden-view');
+            else if (viewId === 'welcome-view') views.welcome.classList.remove('hidden-view');
+            else {
+                const title = document.getElementById('page-title'); const subtitle = document.getElementById('page-subtitle'); const icon = document.getElementById('page-icon');
+                if (viewId === 'siswa-view') { title.innerText = "Data Siswa"; subtitle.innerText = "Manajemen profil siswa."; icon.innerHTML = `<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`; currentSiswaTab = "s1"; renderSiswaPage(); }
+                else if (viewId === 'nilai-view') { title.innerText = "Nilai Akademik"; subtitle.innerText = "Pantau hasil belajar."; icon.innerHTML = `<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`; currentSemester = "s1"; renderNilaiPage(); }
+                else if (viewId === 'absensi-view') { title.innerText = "Absensi"; subtitle.innerText = "Rekap kehadiran."; icon.innerHTML = `<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>`; currentSemester = "s1"; renderAbsensiPage(); }
+                else if (viewId === 'konseling-view') { title.innerText = "Konseling"; subtitle.innerText = "Bimbingan karakter."; icon.innerHTML = `<svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>`; currentCounselingTab = "akademik"; renderCounselingPage(); }
+                views.content.classList.remove('hidden-view');
+            }
+        }
+
+        function init() {
+            document.getElementById('quote-text').innerText = "Pendidikan adalah senjata paling mematikan di dunia.";
+            const res = [{t:"Pendampingan Jangka Panjang", d:"Membangun hubungan konsisten dan mendalam dengan siswa dari awal hingga lulus sekolah."}, {t:"Pengembangan Holistik", d:"Membimbing karakter, kompetensi, keterampilan, dan kesejahteraan (well-being) individu siswa."}, {t:"Jembatan Komunikasi", d:"Menjadi penghubung antara sekolah, orang tua, dan siswa untuk mendukung perkembangan siswa."}, {t:"Pembinaan Karakter", d:"Memberikan bimbingan sopan santun, etika, dan nilai-nilai moral."}, {t:"Kolaborasi", d:"Bekerja sama dengan guru BK dan wali kelas untuk memastikan perkembangan siswa berjalan optimal."}];
+            document.getElementById('responsibilities-list').innerHTML = res.map(i => `<div class="flex gap-3 text-sm"><div class="mt-2 w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></div><p><b>${i.t}:</b> ${i.d}</p></div>`).join('');
+        }
+
+        document.getElementById('btn-start').onclick = () => document.getElementById('modal-guru').classList.remove('hidden');
+        function closeModal() { document.getElementById('modal-guru').classList.add('hidden'); }
+        document.getElementById('select-guru').onchange = (e) => {
+            selectedTeacher = e.target.value; document.getElementById('welcome-user').innerText = `Halo, ${selectedTeacher}`;
+            closeModal(); navigateTo('dashboard-view');
+        };
+        document.getElementById('btn-logout').onclick = () => {
+            selectedTeacher = ""; document.getElementById('select-guru').selectedIndex = 0;
+            navigateTo('welcome-view'); document.getElementById('modal-guru').classList.remove('hidden'); 
+        };
+        init();
+
+/**
+         * 3D INTERACTION LOGIC
+         */
+        function init3DGrid() {
+            const cards = document.querySelectorAll('.card-3d');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    card.classList.remove('returning');
+                    const rect = card.getBoundingClientRect();
+                    
+                    // Hitung posisi relatif kursor di dalam kartu
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                     
+                    // Konversi ke persentase untuk efek kilauan (glow)
+                    const xPct = (x / rect.width) * 100;
+                    const yPct = (y / rect.height) * 100;
+                    
+                    // Hitung derajat rotasi (Max tilt 20 derajat)
+                    const rotateX = ((y / rect.height) - 1.3) * -40;
+                    const rotateY = ((x / rect.width) - 1.3) * 40;
+                    
+                    // Update CSS Variables & Transform
+                    card.style.setProperty('--mouse-x', `${xPct}%`);
+                    card.style.setProperty('--mouse-y', `${yPct}%`);
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    // Beri kelas returning untuk transisi halus saat kembali ke posisi netral
+                    card.classList.add('returning');
+                    card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+                    
+                    // Hapus kelas setelah animasi selesai
+                    setTimeout(() => {
+                        card.classList.remove('returning');
+                    }, 600);
+                });
+            });
+        }
+
+        /**
+         * NAVIGATION & UI LOGIC
+         */
+        function handleNavigate(target) {
+            const msgBox = document.getElementById('msg-box');
+            const msgContent = document.getElementById('msg-content');
+            const msgText = document.getElementById('msg-text');
+            
+            msgText.innerText = `Sedang memproses modul ${target}...`;
+            msgBox.classList.remove('hidden');
+            
+            // Trigger animation
+            setTimeout(() => {
+                msgContent.classList.remove('scale-90', 'opacity-0');
+                msgContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeMsg() {
+            const msgBox = document.getElementById('msg-box');
+            const msgContent = document.getElementById('msg-content');
+            
+            msgContent.classList.add('scale-90', 'opacity-0');
+            msgContent.classList.remove('scale-100', 'opacity-100');
+            
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 300);
+        }
+
+        // Jalankan inisialisasi saat DOM siap
+        window.addEventListener('DOMContentLoaded', () => {
+            init3DGrid();
+        });
+    </script>
+</body>
+</html>quote
