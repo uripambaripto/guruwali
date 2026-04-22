@@ -134,7 +134,7 @@
         .sticky-col {
             position: sticky;
             left: 0;
-            background-color: b lue;
+            background-color: white;
             z-index: 10;
             border-right: 1px solid #f1f5f9;
         }
@@ -476,8 +476,8 @@
                 <div id="detail-content" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 </div>
                 
-                <div class="mt-1 pt-1 border-t border-aquamarine-200">
-                    <button onclick="closeDetail()" class="w-full bg-yellow py-4 rounded-2xl font-black text-slate-600 hover:text-indigo-600 transition-all border border-slate-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                <div class="mt-1 pt-1 border-t border-red-200">
+                    <button onclick="closeDetail()" class="w-full bg-red py-4 rounded-2xl font-black text-slate-600 hover:text-indigo-600 transition-all border border-slate-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2">
                         <span>Tutup Profil</span>
                     </button>
                 </div>
@@ -494,6 +494,7 @@
                     <select id="select-guru" class="w-full appearance-none bg-white text-slate-700 text-sm font-semibold rounded-xl block p-5 pr-12 cursor-pointer outline-none hover:bg-slate-50">
                         <option value="" disabled selected>Pilih Guru Wali Anda...</option>
                         <option value="Ali Sadikin">Ali Sadikin</option>
+                        <option value="Ali Sadikin">Atin Septiasari</option>
                         <option value="Ina Solikhati">Ina Solikhati</option>
                         <option value="Syihabudin">Syihabudin</option>
                         <option value="Urip Ambaripto">Urip Ambaripto</option>
@@ -524,6 +525,12 @@
                 nilai: "https://script.google.com/macros/s/AKfycbyam7P5ZTbzGdwKeixt0Hr83sr0t53xzU8bUY4BqsjdSWeNSX1afi_scQwJ0Ya3NDZA/exec",
                 absensi: "https://script.google.com/macros/s/AKfycbzhtj4myj-KynV0E-6WJ8X8lNEMcv2VUV_731mU_0IPYikPfMIGXmSAGPdkU_7Zw07i/exec",
                 konseling: "https://script.google.com/macros/s/AKfycbxRjYwREdFztEYeGj5qSpojQJVtCJHg_bM2l-2wPlJ0iXpA7UBYVi-xPlP5K1HXWNpq/exec"
+            },
+            "Atin Septiasari": {
+                siswa: "https://script.google.com/macros/s/AKfycbyI4wKdbhHdL2c8RLhM7J8zc4ARrPQlx6u7tYDCUukuONwAVUco8iobyBmRYoLc8s7OJQ/exec",
+                nilai: "https://script.google.com/macros/s/AKfycbw-UQq6QPeIhjVw0LMKkq_TctfXFoBduXZlozgKvx0cTRUq57sWOxganVK4E97tyAeW/exec",
+                absensi: "https://script.google.com/macros/s/AKfycby8yftygWnKgSTSK-rbxGMBVYZND1Q-VGVGu455eGIFASh2kFio_SxI6duf1COmxzZIWw/exec",
+                konseling: "https://script.google.com/macros/s/AKfycby8Sci9bPQktXxOOdzj5aPIgRWr3AXAeIWqcGkl85UeklYgecTKDJpJCapgnI7JK6DF/exec"
             },
             "Ina Solikhati": {
                 siswa: "https://script.google.com/macros/s/AKfycbwbkvWfx6xtvfWFxDMkegTWkG-BGw4Vn-WNMm4u9ZCbbAfVTjZo5jpYxvMBskknDwSZQw/exec",
@@ -636,7 +643,7 @@
             const extraHeader = document.getElementById('page-extra-header');
             const body = document.getElementById('page-body');
             const tabs = [{ id: "akademik", label: "Akademik" }, { id: "kompetensi", label: "Kompetensi" }, { id: "karakter", label: "Karakter" }];
-            extraHeader.innerHTML = `<div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-full md:w-auto mt-4 md:mt-0">${tabs.map(tab => `<button onclick="changeCounselingTab('${tab.id}')" class="px-1 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentCounselingTab === tab.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:bg-white/50'}">${tab.label}</button>`).join('')}</div>`;
+            extraHeader.innerHTML = `<div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl w-full md:w-auto mt-4 md:mt-0">${tabs.map(tab => `<button onclick="changeCounselingTab('${tab.id}')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${currentCounselingTab === tab.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:bg-white/50'}">${tab.label}</button>`).join('')}</div>`;
             body.innerHTML = `<div class="space-y-1"><div class="flex justify-between items-center"><h4 class="font-bold text-slate-800 capitalize">Bimbingan & Konseling: ${currentCounselingTab}</h4></div><div class="overflow-x-auto border border-slate-100 rounded-2xl"><table class="w-full text-left border-collapse min-w-[800px]"><thead id="counseling-header"></thead><tbody id="counseling-body"></tbody></table></div></div>`;
             await renderCounselingData();
         }
@@ -839,17 +846,26 @@
             });
             let c = '#3b82f6'; let l = tipe;
             if(tipe === 'I') c = '#f59e0b'; else if(tipe === 'A') c = '#ef4444'; else if(tipe === 'TOTAL') c = '#991b1b';
-            renderChartModal(nama, `Tren Ketidakhadiran: ${l}`, values, c, 10);
+            renderChartModal(nama, `Tren Ketidakhadiran: ${l}`, values, c, 10, false, true);
         }
 
-        function renderChartModal(nama, subtitle, dataPoints, color, maxScale = 100, isRank = false) {
+        function renderChartModal(nama, subtitle, dataPoints, color, maxScale = 100, isRank = false, isAbsensi = false) {
             const modal = document.getElementById('modal-grafik');
             const ctx = document.getElementById('chartPerkembangan').getContext('2d');
             const note = document.getElementById('grafik-note');
             document.getElementById('grafik-title').innerText = nama;
             document.getElementById('grafik-subtitle').innerText = subtitle;
             document.getElementById('grafik-subtitle').style.color = color;
-            note.innerText = isRank ? "Grafik peringkat menunjukkan posisi siswa. Semakin ke atas (menuju angka 1), semakin baik." : "Data grafik diambil dari akumulasi nilai atau kehadiran tiap semester.";
+            
+            // Logika catatan teks (note)
+            if (isRank) {
+                note.innerText = "Grafik peringkat menunjukkan posisi siswa. Semakin ke atas (menuju angka 1), semakin baik prestasinya.";
+            } else if (isAbsensi) {
+                note.innerText = "Grafik tren ketidakhadiran menunjukkan jumlah hari absen. Angka yang lebih rendah menunjukkan tingkat kehadiran yang lebih baik.";
+            } else {
+                note.innerText = "Data grafik diambil dari rata-rata atau akumulasi nilai akademik tiap semester.";
+            }
+
             modal.classList.remove('hidden');
             if (chartInstance) chartInstance.destroy();
             chartInstance = new Chart(ctx, {
@@ -859,7 +875,7 @@
                     datasets: [{
                         label: subtitle,
                         data: dataPoints,
-                        borderColor: '#6366f1',
+                        borderColor: color,
                         backgroundColor: `${color}1A`,
                         borderWidth: 4,
                         tension: 0.4,
@@ -900,7 +916,11 @@
                         ctx.fillStyle = color; ctx.textAlign = 'center';
                         chart.getDatasetMeta(0).data.forEach((point, i) => {
                             const val = chart.data.datasets[0].data[i];
-                            if (val !== null && val !== undefined) ctx.fillText(isRank ? Math.round(val) : val.toFixed(0), point.x, point.y - 15);
+                            if (val !== null && val !== undefined && val !== 0) {
+                                // Perbaikan: Gunakan Math.round untuk absensi/peringkat, toFixed untuk nilai
+                                const displayValue = (isAbsensi || isRank) ? Math.round(val) : val.toFixed(1);
+                                ctx.fillText(displayValue, point.x, point.y - 15);
+                            }
                         });
                         ctx.restore();
                     }
@@ -959,7 +979,7 @@
         };
         init();
 
-/**
+        /**
          * 3D INTERACTION LOGIC
          */
         function init3DGrid() {
@@ -969,72 +989,28 @@
                 card.addEventListener('mousemove', (e) => {
                     card.classList.remove('returning');
                     const rect = card.getBoundingClientRect();
-                    
-                    // Hitung posisi relatif kursor di dalam kartu
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                     
-                    // Konversi ke persentase untuk efek kilauan (glow)
                     const xPct = (x / rect.width) * 100;
                     const yPct = (y / rect.height) * 100;
-                    
-                    // Hitung derajat rotasi (Max tilt 20 derajat)
                     const rotateX = ((y / rect.height) - 1.3) * -40;
                     const rotateY = ((x / rect.width) - 1.3) * 40;
-                    
-                    // Update CSS Variables & Transform
                     card.style.setProperty('--mouse-x', `${xPct}%`);
                     card.style.setProperty('--mouse-y', `${yPct}%`);
                     card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
                 });
 
                 card.addEventListener('mouseleave', () => {
-                    // Beri kelas returning untuk transisi halus saat kembali ke posisi netral
                     card.classList.add('returning');
                     card.style.transform = `rotateX(0deg) rotateY(0deg)`;
-                    
-                    // Hapus kelas setelah animasi selesai
-                    setTimeout(() => {
-                        card.classList.remove('returning');
-                    }, 600);
+                    setTimeout(() => { card.classList.remove('returning'); }, 600);
                 });
             });
         }
 
-        /**
-         * NAVIGATION & UI LOGIC
-         */
-        function handleNavigate(target) {
-            const msgBox = document.getElementById('msg-box');
-            const msgContent = document.getElementById('msg-content');
-            const msgText = document.getElementById('msg-text');
-            
-            msgText.innerText = `Sedang memproses modul ${target}...`;
-            msgBox.classList.remove('hidden');
-            
-            // Trigger animation
-            setTimeout(() => {
-                msgContent.classList.remove('scale-90', 'opacity-0');
-                msgContent.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeMsg() {
-            const msgBox = document.getElementById('msg-box');
-            const msgContent = document.getElementById('msg-content');
-            
-            msgContent.classList.add('scale-90', 'opacity-0');
-            msgContent.classList.remove('scale-100', 'opacity-100');
-            
-            setTimeout(() => {
-                msgBox.classList.add('hidden');
-            }, 300);
-        }
-
-        // Jalankan inisialisasi saat DOM siap
         window.addEventListener('DOMContentLoaded', () => {
             init3DGrid();
         });
     </script>
 </body>
-</html>quote
+</html>
