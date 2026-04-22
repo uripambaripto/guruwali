@@ -335,7 +335,7 @@
                 </div>
             </div>
 
-            <div class="pt-2 flex flex-col items-center">
+            <div class="pt-5 flex flex-col items-center">
                 <button id="btn-start" class="group animate-button-zoom relative overflow-hidden inline-flex items-center bg-transparent border-2 border-indigo-200 px-8 py-3 rounded-xl font-black text-xl transition-all duration-500 hover:border-indigo-400 cursor-pointer mb-3">
                     <span class="animate-text-rainbow drop-shadow-sm">Mulai</span>
                 </button>
@@ -672,8 +672,8 @@
             
             if (data.length > 0) {
                 countLabel.innerText = `${data.length} Siswa Bimbingan Guru Wali`;
-                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100"><th class="py-1 px-1 text-[12px] font-black font-bold drop-cap::first-letter tracking-widest sticky-col text-left">Nama</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-200">Kelas</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-100">Aksi</th></tr>`;
-                tableBody.innerHTML = data.map((item, index) => `<tr class="hover:bg-slate-50 border-b border-slate-100 last:border-0 group"><td class="py-1 px-1 text-xs sticky-col font-bold text-blue-800 group-hover:bg-indigo-50/30">${item["Nama"] || item["Nama Siswa"] || "-"}</td><td class="py-1 px-1 text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200 text-xs group-hover:bg-indigo-50/30">${item["Kelas"] || "-"}</td><td class="py-1 px-1 text-center border-l border-slate-50 group-hover:bg-indigo-50/30"><button onclick="openDetail(${index})" class="bg-green-900 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold hover:bg-indigo-600 transition-all cursor-pointer">Detail</button></td></tr>`).join('');
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100"><th class="py-1 px-1 text-[12px] font-black font-bold drop-cap::first-letter tracking-widest text-left">Nama</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-200">Kelas</th><th class="py-1 px-1 text-[12px] font-black drop-cap::first-letter tracking-widest text-center border-l border-blue-100">Aksi</th></tr>`;
+                tableBody.innerHTML = data.map((item, index) => `<tr class="hover:bg-blue-50 border-b border-slate-100 last:border-0 group"><td class="py-1 px-1 text-xs sticky-col font-bold text-blue-800 group-hover:bg-indigo-50/30">${item["Nama"] || item["Nama Siswa"] || "-"}</td><td class="py-1 px-1 text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200 text-xs group-hover:bg-indigo-50/30">${item["Kelas"] || "-"}</td><td class="py-1 px-1 text-center border-l border-slate-50 group-hover:bg-indigo-50/30"><button onclick="openDetail(${index})" class="bg-green-900 text-white px-4 py-1.5 rounded-lg text-[10px] font-bold hover:bg-indigo-600 transition-all cursor-pointer">Detail</button></td></tr>`).join('');
             } else { countLabel.innerText = "0 Siswa"; tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
         }
 
@@ -699,7 +699,7 @@
                 const allHeaders = Object.keys(data[0]);
                 const headers = allHeaders.filter(h => !isNoColumn(h));
 
-                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black drop-cap::first-letter tracking-widest ${isNameColumn(h) ? 'sticky-col text-left align-top' : (isClassColumn(h) ? 'text-left align-top bg-blue-100 border-l border-blue-200' : 'text-left align-top border-l border-blue-100')}">${h}</th>`).join('')}</tr>`;
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black drop-cap::first-letter tracking-widest ${isNameColumn(h) ? 'text-left align-top' : (isClassColumn(h) ? 'text-left align-top bg-blue-100 border-l border-blue-200' : 'text-left align-top border-l border-blue-100')}">${h}</th>`).join('')}</tr>`;
                 tableBody.innerHTML = data.map(item => `<tr class="hover:bg-indigo-50/30 transition-colors border-b border-slate-50 group">${headers.map((h) => `<td class="py-1 px-1 text-xs ${isNameColumn(h) ? 'sticky-col font-bold text-blue-800 text-left align-top' : (isClassColumn(h) ? 'text-left align-top text-slate-900 font-bold bg-slate-50 border-l border-slate-200' : 'text-left align-top text-slate-600 border-l border-slate-50')} group-hover:bg-indigo-50/30">${cleanVal(item[h])}</td>`).join('')}</tr>`).join('');
             } else { tableBody.innerHTML = `<tr><td class="py-10 text-left align-top text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
         }
@@ -729,7 +729,7 @@
                 const allHeaders = Object.keys(data[0]);
                 const headers = allHeaders.filter(h => !isNoColumn(h));
 
-                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest ${isNameColumn(h) ? 'sticky-col text-left' : (isClassColumn(h) ? 'text-center bg-slate-100 border-l border-slate-200' : 'text-center border-l border-slate-100')}">${h}</th>`).join('')}</tr>`;
+                tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100">${headers.map((h) => `<th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest ${isNameColumn(h) ? 'text-left' : (isClassColumn(h) ? 'text-center bg-slate-100 border-l border-slate-200' : 'text-center border-l border-blue-100')}">${h}</th>`).join('')}</tr>`;
                 tableBody.innerHTML = data.map(item => `<tr class="hover:bg-indigo-50/30 border-b border-slate-50 group">${headers.map((h) => {
                     let customClass = "";
                     const headerClean = h.toLowerCase().trim();
@@ -737,14 +737,14 @@
                     if (headerClean === "rata-rata" || headerClean === "rata rata") customClass = "col-avg-highlight";
                     if (headerClean === "peringkat" || headerClean === "rank") customClass = "col-rank-highlight";
                     
-                    return `<td class="py-1 px-1 text-xs ${isNameColumn(h) ? 'sticky-col font-bold text-slate-800 text-left' : (isClassColumn(h) ? 'text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200' : 'text-center text-slate-600 border-l border-slate-100')} group-hover:bg-indigo-50/30 ${customClass}">${cleanVal(item[h])}</td>`;
+                    return `<td class="py-1 px-1 text-xs ${isNameColumn(h) ? 'sticky-col font-bold text-blue-800 text-left' : (isClassColumn(h) ? 'text-center text-slate-900 font-bold bg-slate-50 border-l border-slate-200' : 'text-center text-slate-600 border-l border-slate-100')} group-hover:bg-indigo-50/30 ${customClass}">${cleanVal(item[h])}</td>`;
                 }).join('')}</tr>`).join('');
             } else { tableBody.innerHTML = `<tr><td class="py-10 text-center text-slate-400 italic font-bold">Data kosong.</td></tr>`; }
         }
 
         async function renderRataRataRapor(tableBody, tableHeader) {
-            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100">
-                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest sticky-col text-left">Nama Siswa</th>
+            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100">
+                <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-left">Nama Siswa</th>
                 <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-center border-l border-slate-200">Kelas</th>
                 ${ACADEMIC_SUBJECTS.map(subj => `<th class="py-1 px-1 text-[9px] font-black text-slate-900 uppercase tracking-tighter text-center border-l border-slate-100">${subj}</th>`).join('')}
                 <th class="py-1 px-1 text-[10px] font-black text-slate-900 uppercase tracking-widest text-center border-l border-slate-200">Rata-Rata</th>
@@ -811,7 +811,7 @@
         }
 
         async function renderTotalAbsensi(tableBody, tableHeader) {
-            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-slate-100"><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest sticky-col text-left">Nama Siswa</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-200">Kelas</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">S (Sakit)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">I (Izin)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-100">A (Alfa)</th><th class="py-1 px-1 text-[10px] font-black text-red-700 uppercase tracking-widest text-center border-l border-slate-200">Total Akumulasi</th></tr>`;
+            tableHeader.innerHTML = `<tr class="bg-blue-50 border-b border-blue-100"><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-left">Nama Siswa</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-slate-200">Kelas</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-blue-100">S (Sakit)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-blue-100">I (Izin)</th><th class="py-1 px-1 text-[10px] font-black uppercase tracking-widest text-center border-l border-blue-100">A (Alfa)</th><th class="py-1 px-1 text-[10px] font-black text-red-700 uppercase tracking-widest text-center border-l border-slate-200">Total Akumulasi</th></tr>`;
             const promises = [1,2,3,4,5,6].map(num => fetchData("absensi", `s${num}`));
             const allData = await Promise.all(promises);
             currentFullAbsensiData = allData;
