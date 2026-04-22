@@ -257,6 +257,44 @@
             backdrop-filter: blur(4px);
         }
 
+/* Animasi Border Quote */
+        @keyframes border-glow {
+            0%, 100% { border-color: rgba(79, 70, 229, 0.3); box-shadow: 0 0 15px rgba(79, 70, 229, 0.1); }
+            50% { border-color: rgba(16, 185, 129, 0.3); box-shadow: 0 0 25px rgba(16, 185, 129, 0.2); }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .animate-button-zoom {
+            animation: button-zoom 2.5s ease-in-out infinite;
+        }
+        
+        .animate-text-rainbow {
+            animation: text-rainbow 4s linear infinite;
+        }
+
+        .animate-spin-custom {
+            animation: spin-once 0.6s ease-in-out;
+        }
+
+        .quote-container {
+            position: relative;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 1.5rem;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(90deg, #4f46e5, #10b981, #f59e0b) border-box;
+            animation: border-glow 4s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+
+        .quote-container:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)) padding-box,
+                        linear-gradient(90deg, #f59e0b, #4f46e5, #10b981) border-box;
+        }
             
     </style>
 </head>
@@ -277,18 +315,23 @@
                 <h1 class="text-5xl md:text-6xl font-black tracking-tight text-indigo-900 leading-tight">
                     Selamat Datang
                 </h1>
-                <p class="text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">
+                <p class="text-aqua-400 font-bold drop-cap::first-letter tracking-[0.3em] text-[14px]">
                     Sistem Informasi Guru Wali
                 </p>
             </div>
 
-            <div class="relative group scale-95 md:scale-100">
-                <div class="relative z-10 p-6 md:p-10 bg-white/40 backdrop-blur-sm border border-indigo-100 rounded-[2rem] shadow-sm">
-                    <p class="text-slate-700 text-base md:text-xl leading-[1.6] font-medium tracking-tight">
+            <div class="quote-container w-full group">
+                    <div class="absolute -top-3 left-6 bg-white px-2">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-indigo-500 opacity-50"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L22.017 3V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM2.01697 21L2.01697 18C2.01697 16.8954 2.9124 16 4.01697 16H7.01697C7.56925 16 8.01697 15.5523 8.01697 15V9C8.01697 8.44772 7.56925 8 7.01697 8H4.01697C2.9124 8 2.01697 7.10457 2.01697 6V3L10.017 3V15C10.017 18.3137 7.33068 21 4.01697 21H2.01697Z"/></svg>
+                    </div>
+                    <p class="text-slate-700 text-base md:text-xl leading-[1.6] font-medium tracking-tight">                        
                         Guru wali adalah guru mata pelajaran yang ditugaskan secara khusus oleh kepala sekolah untuk 
                         <span class="text-indigo-600 font-bold"> mendampingi perkembangan akademik, sosial, dan karakter </span> 
                         peserta didik secara berkelanjutan. Peran ini diatur dalam <span class="font-bold text-slate-900">Permendikdasmen Nomor 11 Tahun 2025</span>.
                     </p>
+                <div class="absolute -bottom-3 right-6 bg-white px-2 rotate-180">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-emerald-500 opacity-50"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L22.017 3V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM2.01697 21L2.01697 18C2.01697 16.8954 2.9124 16 4.01697 16H7.01697C7.56925 16 8.01697 15.5523 8.01697 15V9C8.01697 8.44772 7.56925 8 7.01697 8H4.01697C2.9124 8 2.01697 7.10457 2.01697 6V3L10.017 3V15C10.017 18.3137 7.33068 21 4.01697 21H2.01697Z"/></svg>
+                    </div>
                 </div>
             </div>
 
