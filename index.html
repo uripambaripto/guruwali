@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -382,7 +382,7 @@
             <!-- Menu Grid Utama -->
             <div class="border-t border-slate-200 pt-5">
                 <p class="text-[10px] text-sm font-black font-bold text-black-800 drop-cap::first-letter tracking-widest mb-2 text-center md:text-left">Akses Cepat Menu Guru Wali</p>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     
                     <!-- Menu 1 -->
                     <button onclick="navigateTo('siswa-view')" 
@@ -473,7 +473,7 @@
         <div class="relative bg-white w-full max-w-3xl rounded-[0rem] shadow-2xl overflow-hidden animate-fadeIn flex flex-col max-h-[90vh]">
             <div class="p-2 border-b border-slate-100 flex justify-between items-center">
                 <div>
-                    <p id="grafik-subtitle" class="text-indigo-600 font-black text-[10px] uppercase tracking-widest mb-1">Perkembangan Nilai</p>
+                    <p id="grafik-subtitle" class="text-indigo-600 font-black text-[16px] uppercase tracking-widest mb-1">Perkembangan Nilai</p>
                     <h3 id="grafik-title" class="text-2xl font-black text-slate-900 leading-tight">Nama Siswa</h3>
                 </div>
                 <button onclick="closeGrafik()" class="p-3 bg-slate-100 text-slate-500 hover:bg-red-50 hover:text-red-600 rounded-2xl transition-all">
@@ -798,7 +798,7 @@
                     }).join('');
                     
                     return `<tr class="hover:bg-indigo-50/30 transition-colors border-b border-slate-50 group">
-                        <td class="py-1 px-1 sticky-col group-hover:bg-indigo-50/30 text-left font-bold text-slate-800 text-xs">${s.nama}</td>
+                        <td class="py-1 px-1 sticky-col group-hover:bg-indigo-50/30 text-left font-bold text-blue-800 text-xs">${s.nama}</td>
                         <td class="py-1 px-1 text-center font-bold text-slate-900 bg-slate-50 border-l border-slate-200 text-xs">${s.kelas}</td>
                         ${rowHtml}
                         <td class="py-1 px-1 text-center font-bold text-slate-600 text-xs border-l border-slate-200 bg-white group-hover:bg-indigo-50/30 clickable-cell" onclick="openGrafikRataRata('${s.nama}')">${s.finalAvgValue.toFixed(1)}</td>
